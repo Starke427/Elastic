@@ -1,5 +1,6 @@
 # Elastic Agent
 
+```
 $args = 
 $version = 7.10.2
 
@@ -9,3 +10,4 @@ $file1 = "$env:temp\elastic-agent.zip"
 Set-ExecutionPolicy -ExecutionPolicy Bypass -force
 Expand-Archive -LiteralPath "$env:temp\elastic-agent.zip" -DestinationPath "C:\Program Files\"
 & C:\Program Files\Elastic\Agent\elastic-agent.exe $args
+```
