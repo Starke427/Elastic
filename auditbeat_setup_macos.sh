@@ -57,22 +57,53 @@ else
 fi
 
 echo ""
-echo "Starting Auditbeat $version installation..."a
+echo "Starting Auditbeat $version installation..."
 
-########## Download and configure auditbeat
+########## Download auditbeat
 curl -L -O https://artifacts.elastic.co/downloads/beats/auditbeat/auditbeat-$version-darwin-x86_64.tar.gz
 tar xzvf auditbeat-$version-darwin-x86_64.tar.gz
 rm -f auditbeat-$version-darwin-x86_64.tar.gz
 sudo mv auditbeat-$version-* /usr/local/auditbeat
 
-########## Configure Elastic connection
-#cloudID=$(echo 'cloud.id: "'$cloudID'"')
-sudo echo 'cloud.id: "'$cloudID'"' >> /usr/local/auditbeat/auditbeat.yml
-sudo echo 'cloud.auth: "'$cloudAuthUser':'$cloudAuthPass'"' >> /usr/local/auditbeat/auditbeat.yml
+########## Configure auditbeat
+cat > /usr/local/auditbeat/auditbeat.yml << EOF
+auditbeat.modules:
+- module: file_integrity
+  paths:
+  - /bin
+  - /usr/bin
+  - /usr/local/bin
+  - /sbin
+  - /usr/sbin
+  - /usr/local/sbin
+- module: system
+  datasets:
+    - login # Authentication events, added to default configuration.
+    - user # User modifications, added to default configuration.
+  period: 5m # The frequency at which the datasets check for changes
+- module: system
+  datasets:
+    - socket # Started and stopped processes
+    - process # Network connection information
+    - package # Installed, updated, and removed packages
+  state.period: 1h
+- module: system
+  datasets:
+    - host    # General host information, e.g. uptime, IPs
+  state.period: 24h
+setup.template.settings:
+  index.number_of_shards: 1
+setup.kibana:
+#output.elasticsearch:
+#  hosts: ["localhost:9200"]
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+cloud.id: "'$cloudID'"
+cloud.auth: "'$cloudAuthUser':'$cloudAuthPass'"
+EOF
 sudo chown -R root:wheel /usr/local/auditbeat
-
-
-########## Configure collection modules
 
 
 ########## Configure autostart plist
