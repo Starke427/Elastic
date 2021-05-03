@@ -76,6 +76,24 @@ auditbeat.modules:
   - /sbin
   - /usr/sbin
   - /usr/local/sbin
+  - /opt/bin
+  - /opt/sbin
+  - /Applications
+  - /etc/passwd
+  - /etc/resolv.conf
+  - /etc/hosts
+  - /etc/rc.common
+  - /etc/pam.d/
+  - /etc/crontab
+  - /etc/cron.d/
+  - /root/.ssh/authorized_keys
+  - /System/Library/LaunchAgents/
+  - /Library/LaunchAgents/
+  - /Users/%/Library/LaunchAgents/
+  - /System/Library/LaunchDaemons/
+  - /Library/LaunchDaemons/
+  - /Users/%/Library/Preferences/com.apple.loginitems.plist
+  - /Users/%/Library/Preferences/com.apple.loginwindow.plist
 - module: system
   datasets:
     - process # Started and stopped processes
