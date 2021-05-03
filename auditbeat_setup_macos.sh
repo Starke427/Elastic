@@ -89,9 +89,9 @@ auditbeat.modules:
   state.period: 24h
 setup.template.settings:
   index.number_of_shards: 1
-#setup.kibana:
-#output.elasticsearch:
-#  hosts: ["localhost:9200"]
+setup.kibana:
+output.elasticsearch:
+  hosts: ["localhost:9200"]
 processors:
   - add_host_metadata: ~
   - add_cloud_metadata: ~
