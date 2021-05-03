@@ -100,8 +100,8 @@ processors:
   - add_host_metadata: ~
   - add_cloud_metadata: ~
   - add_docker_metadata: ~
-cloud.id: "'$cloudID'"
-cloud.auth: "'$cloudAuthUser':'$cloudAuthPass'"
+cloud.id: "$cloudID"
+cloud.auth: "$cloudAuthUser:$cloudAuthPass"
 EOF
 sudo chown -R root:wheel /usr/local/auditbeat
 
