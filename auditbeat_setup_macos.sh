@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Author: Jeff Starke (Starke427)
-# Updated: 2021May03
+# Updated: 2021 May 03
 
 version=7.12.0
 cloudID=
@@ -57,16 +57,16 @@ else
 fi
 
 echo ""
-echo "Starting Auditbeat $version installation..."
+echo "Starting Auditbeat $version installation..."a
 
-########## Download auditbeat
+########## Download and configure auditbeat
 curl -L -O https://artifacts.elastic.co/downloads/beats/auditbeat/auditbeat-$version-darwin-x86_64.tar.gz
 tar xzvf auditbeat-$version-darwin-x86_64.tar.gz
 rm -f auditbeat-$version-darwin-x86_64.tar.gz
 sudo mv auditbeat-$version-* /usr/local/auditbeat
 
 ########## Configure auditbeat
-cat > /usr/local/auditbeat/auditbeat.yml << EOF
+sudo cat > /usr/local/auditbeat/auditbeat.yml << EOF
 auditbeat.modules:
 - module: file_integrity
   paths:
@@ -78,22 +78,18 @@ auditbeat.modules:
   - /usr/local/sbin
 - module: system
   datasets:
-    - login # Authentication events, added to default configuration.
-    - user # User modifications, added to default configuration.
+    - process # Started and stopped processes
   period: 5m # The frequency at which the datasets check for changes
 - module: system
   datasets:
-    - socket # Started and stopped processes
-    - process # Network connection information
     - package # Installed, updated, and removed packages
-  state.period: 1h
-- module: system
+  period: 1h
   datasets:
     - host    # General host information, e.g. uptime, IPs
   state.period: 24h
 setup.template.settings:
   index.number_of_shards: 1
-setup.kibana:
+#setup.kibana:
 #output.elasticsearch:
 #  hosts: ["localhost:9200"]
 processors:
@@ -103,8 +99,8 @@ processors:
 cloud.id: "$cloudID"
 cloud.auth: "$cloudAuthUser:$cloudAuthPass"
 EOF
-sudo chown -R root:wheel /usr/local/auditbeat
 
+sudo chown -R root:wheel /usr/local/auditbeat
 
 ########## Configure autostart plist
 cat > co.elastic.auditbeat.plist << EOF
