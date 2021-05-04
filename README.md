@@ -23,3 +23,15 @@ curl -o auditbeat_setup_macos.sh https://raw.githubusercontent.com/Starke427/Ela
 chmod 750 auditbeat_setup_macos.sh
 ./auditbeat_setup_macos.sh
 ```
+
+# Packetbeat for MacOS
+
+packetbeat_setup_macos.sh will verify current installation and give you options to download, update or remove a launchpad registered packetbeat service for Elastic Cloud.
+
+You'll need to modify the values at the start of the script to reflect your cloudID and cloudAuth.
+
+```
+curl -o packetbeat_setup_macos.sh https://raw.githubusercontent.com/Starke427/Elastic/master/packetbeat_setup_macos.sh
+chmod 750 packetbeat_setup_macos.sh
+./packetbeat_setup_macos.sh
+```
